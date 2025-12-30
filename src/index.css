@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* JSX/HTML removed from this CSS file — put the following line into a React component file (e.g., src/index.jsx or src/App.jsx):
+   <div className="bg-[#37155da5]">...</div>
+*/
+/* Set the default background and text color for the whole site */
+body {
+  @apply bg-[#143c46] antialiased;
+}
+
+@keyframes glowBorder {
+  0% { box-shadow: 0 0 8px #ff0000; }
+  25% { box-shadow: 0 0 12px #00ffea; }
+  50% { box-shadow: 0 0 12px #7b2dff; }
+  75% { box-shadow: 0 0 12px #00ff44; }
+  100% { box-shadow: 0 0 8px #ff0000; }
+}
+
+.animate-glow-border {
+  animation: glowBorder 2s linear infinite;
+}
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-slideUp {
+  animation: slideUp 0.35s ease-out;
+}
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.25s ease-out;
+}
