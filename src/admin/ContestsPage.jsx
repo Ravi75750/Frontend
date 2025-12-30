@@ -32,7 +32,7 @@ export default function ContestsPage() {
       setErrorMsg("");
 
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/contests`,
+        `${import.meta.env.VITE_API_URL || "/api"}/admin/contests`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -72,7 +72,7 @@ export default function ContestsPage() {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/contest/${deleteTarget._id}`,
+        `${import.meta.env.VITE_API_URL || "/api"}/admin/contest/${deleteTarget._id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

@@ -11,7 +11,7 @@ export default function UTRModal({ contestId, close, user }) {
 
   // Fetch dynamic QR code
   React.useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/system-settings`)
+    axios.get(`${import.meta.env.VITE_API_URL || "/api"}/admin/system-settings`)
       .then(res => {
         if (res.data.paymentQrCode) setQrCodeUrl(res.data.paymentQrCode);
       })
@@ -57,7 +57,7 @@ export default function UTRModal({ contestId, close, user }) {
     if (file) formData.append("screenshot", file);
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/payments/submit`, formData, {
+      await axios.post(`${import.meta.env.VITE_API_URL || "/api"}/payments/submit`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.success("Submitted! Wait for approval.");

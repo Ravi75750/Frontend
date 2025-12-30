@@ -72,7 +72,7 @@ export default function LoginPage({ onClose, mode: initialMode = "login" }) {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/auth/forgot-password`, { email: forgotEmail });
+      const res = await axios.post(`${import.meta.env.VITE_API_URL || "/api"}/auth/forgot-password`, { email: forgotEmail });
       alert(res.data.msg || "Reset link sent!");
       setMode("login");
     } catch (err) {

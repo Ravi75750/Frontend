@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/auth`,
+  baseURL: `${import.meta.env.VITE_API_URL || "/api"}/auth`,
 });
 
 // LOGIN

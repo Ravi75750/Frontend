@@ -20,7 +20,7 @@ export default function AdminLogin() {
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/login`,
+        `${import.meta.env.VITE_API_URL || "/api"}/admin/login`,
         {
           email: email.trim(),
           password,

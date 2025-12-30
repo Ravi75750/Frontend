@@ -7,7 +7,7 @@ const ContestList = ({ user }) => {
 
   const fetchContests = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/contests`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || "/api"}/contests`);
       setContests(res.data);
     } catch (err) {
       console.error("Fetch contests failed:", err);

@@ -18,7 +18,7 @@ export default function AddHighlight() {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/highlights`,
+        `${import.meta.env.VITE_API_URL || "/api"}/highlights`,
         { title, videoURL },
         { headers: { Authorization: `Bearer ${token}` } }
       );

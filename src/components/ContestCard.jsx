@@ -85,7 +85,7 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
     const checkPayment = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/payments/history/${uid}`
+          `${import.meta.env.VITE_API_URL || "/api"}/payments/history/${uid}`
         );
 
         const payment = res.data.find(
@@ -113,7 +113,7 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/contests/${contestId}/join`,
+        `${import.meta.env.VITE_API_URL || "/api"}/contests/${contestId}/join`,
         { userId: uid }
       );
 

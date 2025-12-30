@@ -9,7 +9,7 @@ export default function AdminSettings() {
 
     const fetchSettings = async () => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/system-settings`, {
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL || "/api"}/admin/system-settings`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
             });
             if (data.paymentQrCode) {
@@ -35,7 +35,7 @@ export default function AdminSettings() {
         setLoading(true);
         try {
             const { data } = await axios.put(
-                `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/system-settings`,
+                `${import.meta.env.VITE_API_URL || "/api"}/admin/system-settings`,
                 formData,
                 {
                     headers: {

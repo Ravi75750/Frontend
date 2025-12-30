@@ -15,7 +15,7 @@ export default function VerifyPayments() {
         toast.error("Admin auth required");
         return;
       }
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/payments/pending`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || "/api"}/payments/pending`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPayments(res.data);
@@ -34,7 +34,7 @@ export default function VerifyPayments() {
     try {
       setUpdatingId(id);
       await axios.put(
-        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/payments/update/${id}`,
+        `${import.meta.env.VITE_API_URL || "/api"}/payments/update/${id}`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
