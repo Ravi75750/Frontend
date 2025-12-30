@@ -12,7 +12,7 @@ export default function AdminHighlights() {
   // Load highlights
   const loadHighlights = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/highlights`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/highlights`);
       setHighlights(res.data);
     } catch {
       toast.error("Failed to load highlights");
@@ -30,7 +30,7 @@ export default function AdminHighlights() {
     if (!window.confirm("Delete this highlight?")) return;
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/highlights/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/highlights/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

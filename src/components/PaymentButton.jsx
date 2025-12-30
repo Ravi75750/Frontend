@@ -10,7 +10,7 @@ export default function PaymentButton({ userId, contestId }) {
     if (!utr) return toast.error("Please enter UTR / Transaction ID");
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/payments/create-order`, {
+      await axios.post(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/payments/create-order`, {
         userId,
         contestId,
         utr,

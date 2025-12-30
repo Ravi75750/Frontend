@@ -32,7 +32,7 @@ export default function UsersPage() {
         setErrorMsg("Admin auth required");
         return;
       }
-      const res = await axios.get(`${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/admin/users`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data);
@@ -59,7 +59,7 @@ export default function UsersPage() {
         return toast.error("Admin auth required");
       }
       await axios.delete(
-        `${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/admin/user/${selected._id}`,
+        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/user/${selected._id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -87,7 +87,7 @@ export default function UsersPage() {
         return toast.error("Admin auth required");
       }
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/admin/user`,
+        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/user`,
         newUser,
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -44,7 +44,7 @@ export default function CreateContest() {
       formData.append("image", imageFile);
 
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/admin/contest`,
+        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/contest`,
         formData,
         {
           headers: {

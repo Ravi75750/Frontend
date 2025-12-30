@@ -8,7 +8,7 @@ export default function ForgotPassword() {
   const submit = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/auth/forgot-password`,
+        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/auth/forgot-password`,
         { email }
       );
       toast.success(res.data.msg);

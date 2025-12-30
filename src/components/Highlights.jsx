@@ -9,7 +9,7 @@ export default function Highlights() {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/highlights`)
+      .get(`${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/highlights`)
       .then((res) => {
         setVideos(res.data);
       })

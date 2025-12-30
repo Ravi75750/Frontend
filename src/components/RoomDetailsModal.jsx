@@ -21,7 +21,7 @@ export default function RoomDetailsModal({ contest, onClose, onUpdated }) {
       setSaving(true);
 
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/admin/contest/${contest._id}/room`,
+        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/admin/contest/${contest._id}/room`,
         {
           roomId: roomId.trim(),
           roomPass: roomPass.trim(),

@@ -10,7 +10,7 @@ export default function ResetPassword() {
   const submit = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL || "https://backend-d10xvopad-ravi-sahanis-projects.vercel.app/api"}/auth/reset-password/${token}`,
+        `${import.meta.env.VITE_API_URL || "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api"}/auth/reset-password/${token}`,
         { password }
       );
       toast.success(res.data.msg);
