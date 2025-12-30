@@ -2,12 +2,15 @@
   publish = "dist"
   command = "npm run build"
 
+# 1. Route for specific API calls (like /api/login)
 [[redirects]]
   from = "/api/*"
   to = "https://backend-1sqampll9-ravi-sahanis-projects.vercel.app/api/:splat"
   status = 200
   force = true
 
+
+# 3. SPA Routing (must be at the bottom)
 [[redirects]]
   from = "/*"
   to = "/index.html"
