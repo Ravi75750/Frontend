@@ -25,7 +25,7 @@ export default function NoticeBoard() {
 
     return (
         <div className="bg-gray-800 p-4 rounded-lg border border-yellow-500 mb-6 shadow-lg">
-            <h2 className="text-yellow-400 text-xl font-bold mb-3 flex items-center gap-2">
+            <h2 className="text-yellow-400 text-xl font-bold mb-3 flex justify-center items-center gap-2">
                 📢 Notice Board
             </h2>
             <ul className="space-y-3">
