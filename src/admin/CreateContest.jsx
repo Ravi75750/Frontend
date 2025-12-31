@@ -5,7 +5,10 @@ export default function CreateContest() {
   const [title, setTitle] = useState("");
   const [entryFee, setEntryFee] = useState("");
   const [maxPlayers, setMaxPlayers] = useState("");
-  const [matchTime, setMatchTime] = useState(""); // ✅ NEW
+  const [matchTime, setMatchTime] = useState("");
+  const [firstReward, setFirstReward] = useState("");
+  const [secondReward, setSecondReward] = useState("");
+  const [thirdReward, setThirdReward] = useState("");
   const [imageFile, setImageFile] = useState(null);
 
   const [loading, setLoading] = useState(false);
@@ -51,9 +54,9 @@ export default function CreateContest() {
       // I will fix this by creating state variables in a separate MultiReplace.
       // Retracting this thought, I must do it correctly.
 
-      formData.append("firstReward", e.target.firstReward.value);
-      formData.append("secondReward", e.target.secondReward.value);
-      formData.append("thirdReward", e.target.thirdReward.value);
+      formData.append("firstReward", firstReward);
+      formData.append("secondReward", secondReward);
+      formData.append("thirdReward", thirdReward);
 
       formData.append("image", imageFile);
 
@@ -137,15 +140,15 @@ export default function CreateContest() {
         <div className="grid grid-cols-3 gap-2">
           <div>
             <label className="block mb-1 font-bold text-sm">1st Prize</label>
-            <input type="text" name="firstReward" className="w-full p-2 bg-gray-700 rounded" placeholder="e.g. ₹500" />
+            <input type="text" value={firstReward} onChange={e => setFirstReward(e.target.value)} className="w-full p-2 bg-gray-700 rounded" placeholder="e.g. ₹500" />
           </div>
           <div>
             <label className="block mb-1 font-bold text-sm">2nd Prize</label>
-            <input type="text" name="secondReward" className="w-full p-2 bg-gray-700 rounded" placeholder="e.g. ₹300" />
+            <input type="text" value={secondReward} onChange={e => setSecondReward(e.target.value)} className="w-full p-2 bg-gray-700 rounded" placeholder="e.g. ₹300" />
           </div>
           <div>
             <label className="block mb-1 font-bold text-sm">3rd Prize</label>
-            <input type="text" name="thirdReward" className="w-full p-2 bg-gray-700 rounded" placeholder="e.g. ₹100" />
+            <input type="text" value={thirdReward} onChange={e => setThirdReward(e.target.value)} className="w-full p-2 bg-gray-700 rounded" placeholder="e.g. ₹100" />
           </div>
         </div>
 
