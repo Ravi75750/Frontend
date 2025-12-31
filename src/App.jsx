@@ -27,6 +27,7 @@ import PaymentsPage from "./admin/PaymentsPage";
 import CreateContest from "./admin/CreateContest";
 import AddHighlight from "./admin/AddHighlight";
 import AdminHighlights from "./admin/AdminHighlights";
+import AdminAnnouncements from "./admin/AdminAnnouncements";
 import VerifyPayments from "./admin/VerifyPayment";
 import AdminSettings from "./admin/AdminSettings";
 import { AdminSearchProvider } from "./admin/AdminSearchContext";
@@ -149,6 +150,7 @@ export default function App() {
                             <Route path="add-highlight" element={<AddHighlight />} />
                             <Route path="verify-payments" element={<VerifyPayments />} />
                             <Route path="highlights" element={<AdminHighlights />} />
+                            <Route path="announcements" element={<AdminAnnouncements />} />
                             <Route path="settings" element={<AdminSettings />} />
                         </Route>
 

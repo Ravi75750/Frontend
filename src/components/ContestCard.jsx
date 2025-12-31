@@ -176,13 +176,34 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
         </p>
 
         {/* REWARDS */}
+        {/* REWARDS SECTION */}
         {(contest.rewards?.first || contest.rewards?.second) && (
-          <div className="mt-3 bg-gray-800/50 p-2 rounded text-sm">
-            <p className="text-yellow-400 font-bold">🏆 Prizes:</p>
-            <div className="flex justify-between text-gray-300 mt-1">
-              {contest.rewards.first && <span>🥇 {contest.rewards.first}</span>}
-              {contest.rewards.second && <span>🥈 {contest.rewards.second}</span>}
-              {contest.rewards.third && <span>🥉 {contest.rewards.third}</span>}
+          <div className="mt-4 bg-gradient-to-r from-gray-800 to-gray-900 border border-yellow-600/30 rounded-lg p-3 text-sm relative overflow-hidden group">
+            {/* Shine effect */}
+            <div className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shine" />
+
+            <p className="text-yellow-400 font-bold border-b border-gray-700 pb-1 mb-2 flex items-center gap-2">
+              <span className="text-lg">🏆</span> Prize Pool
+            </p>
+            <div className="space-y-1">
+              {contest.rewards.first && (
+                <div className="flex justify-between items-center text-white">
+                  <span className="flex items-center gap-2 text-yellow-500 font-bold"><span className="text-xl">🥇</span> 1st Place</span>
+                  <span className="font-mono bg-yellow-500/10 px-2 rounded text-yellow-300">{contest.rewards.first}</span>
+                </div>
+              )}
+              {contest.rewards.second && (
+                <div className="flex justify-between items-center text-gray-200">
+                  <span className="flex items-center gap-2 text-gray-400 font-bold"><span className="text-xl">🥈</span> 2nd Place</span>
+                  <span className="font-mono bg-gray-500/10 px-2 rounded">{contest.rewards.second}</span>
+                </div>
+              )}
+              {contest.rewards.third && (
+                <div className="flex justify-between items-center text-orange-200">
+                  <span className="flex items-center gap-2 text-orange-400 font-bold"><span className="text-xl">🥉</span> 3rd Place</span>
+                  <span className="font-mono bg-orange-500/10 px-2 rounded text-orange-300">{contest.rewards.third}</span>
+                </div>
+              )}
             </div>
           </div>
         )}

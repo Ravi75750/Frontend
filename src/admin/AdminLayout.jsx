@@ -54,6 +54,7 @@ export default function AdminLayout() {
           <AdminNavItem to="/admin/payments" icon={CreditCard} label="Payments" />
           <AdminNavItem to="/admin/add-highlight" icon={Video} label="Highlights Upload" />
           <AdminNavItem to="/admin/highlights" icon={Video} label="Manage Highlights" />
+          <AdminNavItem to="/admin/announcements" icon={LayoutDashboard} label="Announcements" />
 
           <AdminNavItem to="/admin/verify-payments" icon={CreditCard} label="Verify Payments" />
           <AdminNavItem to="/admin/settings" icon={LayoutDashboard} label="System Settings" />
