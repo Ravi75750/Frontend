@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import API_URL from "../api/config";
 
 export default function NoticeBoard() {
     const [announcements, setAnnouncements] = useState([]);
@@ -8,9 +9,7 @@ export default function NoticeBoard() {
     useEffect(() => {
         const fetch = async () => {
             try {
-                const res = await axios.get(
-                    `${import.meta.env.VITE_API_URL || "/api"}/announcements`
-                );
+                const res = await axios.get(`${API_URL}/announcements`);
                 setAnnouncements(res.data);
             } catch (err) {
                 console.error("Notice Board Error:", err);
