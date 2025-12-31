@@ -59,6 +59,8 @@ export default function AdminLogin() {
         </h2>
 
         <input
+          id="admin-email"
+          name="email"
           type="email"
           placeholder="Admin Email"
           required
@@ -69,6 +71,8 @@ export default function AdminLogin() {
         />
 
         <input
+          id="admin-password"
+          name="password"
           type="password"
           placeholder="Password"
           required

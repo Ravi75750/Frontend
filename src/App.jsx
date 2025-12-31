@@ -127,8 +127,6 @@ export default function App() {
                         />
 
                         {/* ADMIN ROUTES */}
-                        const isAdmin = !!localStorage.getItem("adminToken");
-
                         <Route path="/admin/login" element={<AdminLogin />} />
 
                         <Route

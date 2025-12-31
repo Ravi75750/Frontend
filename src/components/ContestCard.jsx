@@ -175,6 +175,18 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
           Players: <b>{playerCount}</b> / {contest.maxPlayers}
         </p>
 
+        {/* REWARDS */}
+        {(contest.rewards?.first || contest.rewards?.second) && (
+          <div className="mt-3 bg-gray-800/50 p-2 rounded text-sm">
+            <p className="text-yellow-400 font-bold">🏆 Prizes:</p>
+            <div className="flex justify-between text-gray-300 mt-1">
+              {contest.rewards.first && <span>🥇 {contest.rewards.first}</span>}
+              {contest.rewards.second && <span>🥈 {contest.rewards.second}</span>}
+              {contest.rewards.third && <span>🥉 {contest.rewards.third}</span>}
+            </div>
+          </div>
+        )}
+
         {timeLeft !== null && !isLive && (
           <p className="text-center mt-2 text-yellow-400 font-semibold">
             Starts in: {formatTime(timeLeft)}
@@ -230,65 +242,69 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
             View Room Details
           </button>
         )}
-      </div>
+      </div >
 
       {/* ROOM MODAL */}
-      {showRoomModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-          <div className="bg-[#143c46] w-[90%] max-w-md rounded-lg p-5 text-[#9ce2f9] relative">
-            <button
-              onClick={() => setShowRoomModal(false)}
-              className="absolute top-2 right-3 text-xl font-bold"
-            >
-              ✕
-            </button>
+      {
+        showRoomModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+            <div className="bg-[#143c46] w-[90%] max-w-md rounded-lg p-5 text-[#9ce2f9] relative">
+              <button
+                onClick={() => setShowRoomModal(false)}
+                className="absolute top-2 right-3 text-xl font-bold"
+              >
+                ✕
+              </button>
 
-            <h2 className="text-2xl font-bold mb-3 text-center">
-              Room Details
-            </h2>
+              <h2 className="text-2xl font-bold mb-3 text-center">
+                Room Details
+              </h2>
 
-            {canShowRoomDetails ? (
-              <div className="space-y-3">
-                {["Room ID", "Password"].map((label, i) => {
-                  const value = i === 0 ? contest.roomId : contest.roomPass;
-                  return (
-                    <div
-                      key={label}
-                      className="flex justify-between items-center bg-gray-100 p-2 rounded"
-                    >
-                      <div>
-                        <p className="text-xs text-gray-500">{label}</p>
-                        <p className="font-bold">{value || "N/A"}</p>
-                      </div>
-                      <button
-                        onClick={() =>
-                          copyToClipboard(value, label)
-                        }
-                        className="bg-blue-600 text-white px-3 py-1 rounded"
+              {canShowRoomDetails ? (
+                <div className="space-y-3">
+                  {["Room ID", "Password"].map((label, i) => {
+                    const value = i === 0 ? contest.roomId : contest.roomPass;
+                    return (
+                      <div
+                        key={label}
+                        className="flex justify-between items-center bg-gray-100 p-2 rounded"
                       >
-                        📋 Copy
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className=" text-center  rounded font-bold text-orange-500">
-                Unlocks in {formatTime(Math.max(timeLeft - 2 * 60 * 1000, 0))}
-              </p>
-            )}
+                        <div>
+                          <p className="text-xs text-gray-500">{label}</p>
+                          <p className="font-bold">{value || "N/A"}</p>
+                        </div>
+                        <button
+                          onClick={() =>
+                            copyToClipboard(value, label)
+                          }
+                          className="bg-blue-600 text-white px-3 py-1 rounded"
+                        >
+                          📋 Copy
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className=" text-center  rounded font-bold text-orange-500">
+                  Unlocks in {formatTime(Math.max(timeLeft - 2 * 60 * 1000, 0))}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* PAYMENT */}
-      {showForm && !isFreeContest && (
-        <UTRModal
-          contestId={contestId}
-          user={currentUser}
-          close={() => setShowForm(false)}
-        />
-      )}
+      {
+        showForm && !isFreeContest && (
+          <UTRModal
+            contestId={contestId}
+            user={currentUser}
+            close={() => setShowForm(false)}
+          />
+        )
+      }
     </>
   );
 }

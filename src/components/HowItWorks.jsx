@@ -1,9 +1,15 @@
 import React from 'react';
+import NoticeBoard from './NoticeBoard';
 import { FaUserPlus, FaSearch, FaTrophy, FaExclamationTriangle } from 'react-icons/fa';
 
 const HowItWorks = () => {
   return (
     <section className="py-16 bg-[#143c46] text-center">
+      {/* --- NOTICE BOARD --- */}
+      <div className="max-w-4xl mx-auto mb-6 px-4">
+        <NoticeBoard />
+      </div>
+
       {/* --- Updated Caution Section --- */}
       <div className="max-w-4xl mx-auto mb-12 px-4">
         <div className="bg-[#012129] border border-red-500 text-red-100 p-6 rounded-lg text-left shadow-lg">

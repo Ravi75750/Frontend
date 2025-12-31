@@ -14,7 +14,7 @@ export default function Header({ onLoginClick, onSignUpClick }) {
     <>
       {/* ==================== HEADER ==================== */}
       <header className="bg-[#2b444a] text-white shadow-md">
-        <div className="flex justify-between items-center px-5 py-2">
+        <div className="flex justify-between items-center px-5 py-2 relative">
 
           {/* LOGO */}
 
@@ -23,11 +23,11 @@ export default function Header({ onLoginClick, onSignUpClick }) {
             <img
               src="/Logos.gif"
               alt="Logo"
-              className="h-20 w-auto object-contain -mt-2" // -mt-2 logo ko upar shift karega
+              className="h-20 w-auto object-contain -mt-2 -ml-3 md:ml-0" // -mt-2 logo ko upar shift karega
             />
             <span className="text-4xl font-black italic tracking-tighter uppercase self-center 
                  text-[#9ce2f9] 
-                
+                 absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0
                  hover:text-[#f14e08] transition-all duration-300 cursor-pointer">
               FireContests
             </span>
