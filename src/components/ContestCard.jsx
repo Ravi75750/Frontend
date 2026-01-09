@@ -2,9 +2,11 @@ import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import UTRModal from "./UTRModal";
+import JoinContestModal from "./JoinContestModal";
 
 export default function ContestCard({ contest, user, onJoinedContest }) {
   const [showForm, setShowForm] = useState(false);
+  const [showJoinModal, setShowJoinModal] = useState(false); // ✅ New state
   const [pending, setPending] = useState(false);
   const [verified, setVerified] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
@@ -32,6 +34,21 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
   const contestId = contest._id;
   const entryFee = contest.entryFee ?? 0;
   const isFreeContest = entryFee === 0;
+
+  // ✅ Find my participant info including Slot
+  const myParticipantInfo = useMemo(() => {
+    if (!contest.participants || !uid) return null;
+    return contest.participants.find((p) => {
+      const pId = p.userId?._id || p.userId || p; // Handle populated, object, or string ID (legacy)
+      // Check if p is the new object structure { userId: ... }
+      if (p.userId) {
+        return String(p.userId?._id || p.userId) === String(uid);
+      }
+      // Fallback for types not matching unexpected structure (safety)
+      return String(pId) === String(uid);
+    });
+  }, [contest.participants, uid]);
+
 
   /* ================= COUNTDOWN ================= */
   useEffect(() => {
@@ -71,11 +88,7 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
   useEffect(() => {
     if (!uid) return;
 
-    const joined = contest.participants?.some((p) =>
-      String(p?._id || p) === String(uid)
-    );
-
-    if (joined) {
+    if (myParticipantInfo) {
       setIsJoined(true);
       return;
     }
@@ -100,21 +113,51 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
     checkPayment();
     const interval = setInterval(checkPayment, 5000);
     return () => clearInterval(interval);
-  }, [uid, contestId, contest.participants, isFreeContest]);
+  }, [uid, contestId, myParticipantInfo, isFreeContest]);
 
-  /* ================= JOIN ================= */
-  const joinContestNow = async () => {
+  /* ================= JOIN LOGIC ================= */
+  const handleJoinClick = () => {
     if (!uid) return toast.error("Login required");
     if (contest.status !== "UPCOMING")
       return toast.error("Contest already started");
 
+    // For free contest OR verified paid contest, open the input modal
+    // Note: For PAID contest, we technically pull data from Payment, 
+    // BUT the user "Join Now" flow for free wants inputs.
+    // If it's PAID and verified, we might skip inputs IF backend uses payment data.
+    // However, backend logic:
+    // IF Paid: pulls from Payment.
+    // IF Free: pulls from Body.
+
+    if (isFreeContest) {
+      setShowJoinModal(true);
+    } else {
+      // Paid contest
+      if (verified) {
+        // It's paid and verified. The backend will pull details from Payment.
+        // We can just call joinContestNow without extra data (or with empty/dummy).
+        // BUT wait, does the Payment record HAVE InGameName/ID? Yes, UTRModal sends fullName/ffid.
+        // What about UPI? Payment has UTR. Backend maps UTR to UPI.
+        // So for PAID contest, we DO NOT need the modal.
+        joinContestNow({});
+      } else {
+        // Not verified/not paid yet
+        setShowForm(true); // Open UTR Modal
+      }
+    }
+  };
+
+  const joinContestNow = async (details = {}) => {
     if (joining) return;
     setJoining(true);
 
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL || "/api"}/contests/${contestId}/join`,
-        { userId: uid }
+        {
+          userId: uid,
+          ...details // Pass inGameName, inGameId, upiId if provided (Free contest)
+        }
       );
 
       toast.success(res.data.msg || "Joined contest");
@@ -122,6 +165,7 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
       setPending(false);
       setVerified(false);
       setPlayerCount((p) => p + 1);
+      setShowJoinModal(false);
       onJoinedContest?.();
     } catch (err) {
       toast.error(err.response?.data?.msg || "Join failed");
@@ -130,7 +174,6 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
     }
   };
 
-  /* ================= COPY ================= */
   const copyToClipboard = async (text, label) => {
     if (!text) return toast.error(`${label} not available`);
     try {
@@ -175,11 +218,6 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
           Players: <b>{playerCount}</b> / {contest.maxPlayers}
         </p>
 
-        {/* REWARDS */}
-        {/* REWARDS SECTION */}
-        {/* REWARDS SECTION (Always Visible) */}
-
-
         {timeLeft !== null && !isLive && (
           <p className="text-center mt-2 text-yellow-400 font-semibold">
             Starts in: {formatTime(timeLeft)}
@@ -207,7 +245,7 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
           </button>
         ) : verified && !isFreeContest ? (
           <button
-            onClick={joinContestNow}
+            onClick={handleJoinClick} // Calls joinContestNow direct (Paid)
             disabled={joining}
             className="w-full mt-4 bg-blue-600 text-white py-2 rounded animate-pulse"
           >
@@ -215,11 +253,7 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
           </button>
         ) : (
           <button
-            onClick={() => {
-              if (!uid) return toast.error("Login required");
-              if (isFreeContest) return joinContestNow();
-              setShowForm(true);
-            }}
+            onClick={handleJoinClick} // Opens Modal (Free) or UTR (Paid)
             className="w-full mt-4 bg-green-600 text-white py-2 rounded"
           >
             Join Now
@@ -235,69 +269,83 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
             View Room Details
           </button>
         )}
-      </div >
+      </div>
 
       {/* ROOM MODAL */}
-      {
-        showRoomModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-            <div className="bg-[#143c46] w-[90%] max-w-md rounded-lg p-5 text-[#9ce2f9] relative">
-              <button
-                onClick={() => setShowRoomModal(false)}
-                className="absolute top-2 right-3 text-xl font-bold"
-              >
-                ✕
-              </button>
+      {showRoomModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-[#143c46] w-[90%] max-w-md rounded-lg p-5 text-[#9ce2f9] relative">
+            <button
+              onClick={() => setShowRoomModal(false)}
+              className="absolute top-2 right-3 text-xl font-bold"
+            >
+              ✕
+            </button>
 
-              <h2 className="text-2xl font-bold mb-3 text-center">
-                Room Details
-              </h2>
+            <h2 className="text-2xl font-bold mb-3 text-center">
+              Room Details
+            </h2>
 
-              {canShowRoomDetails ? (
-                <div className="space-y-3">
-                  {["Room ID", "Password"].map((label, i) => {
-                    const value = i === 0 ? contest.roomId : contest.roomPass;
-                    return (
-                      <div
-                        key={label}
-                        className="flex justify-between items-center bg-gray-100 p-2 rounded"
-                      >
-                        <div>
-                          <p className="text-xs text-gray-500">{label}</p>
-                          <p className="font-bold">{value || "N/A"}</p>
-                        </div>
-                        <button
-                          onClick={() =>
-                            copyToClipboard(value, label)
-                          }
-                          className="bg-blue-600 text-white px-3 py-1 rounded"
-                        >
-                          📋 Copy
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <p className=" text-center  rounded font-bold text-orange-500">
-                  Unlocks in {formatTime(Math.max(timeLeft - 2 * 60 * 1000, 0))}
-                </p>
-              )}
+            {/* ✅ SHOW SLOT NUMBER */}
+            <div className="bg-gray-800 p-3 rounded mb-3 text-center border border-yellow-500">
+              <p className="text-gray-400 text-xs uppercase">Your Slot Number</p>
+              <p className="text-3xl font-bold text-yellow-400">
+                {myParticipantInfo?.slotIndex || "N/A"}
+              </p>
             </div>
-          </div>
-        )
-      }
 
-      {/* PAYMENT */}
-      {
-        showForm && !isFreeContest && (
-          <UTRModal
-            contestId={contestId}
-            user={currentUser}
-            close={() => setShowForm(false)}
-          />
-        )
-      }
+
+            {canShowRoomDetails ? (
+              <div className="space-y-3">
+                {["Room ID", "Password"].map((label, i) => {
+                  const value = i === 0 ? contest.roomId : contest.roomPass;
+                  return (
+                    <div
+                      key={label}
+                      className="flex justify-between items-center bg-gray-100 p-2 rounded"
+                    >
+                      <div>
+                        <p className="text-xs text-gray-500">{label}</p>
+                        <p className="font-bold text-black">{value || "N/A"}</p>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(value, label)}
+                        className="bg-blue-600 text-white px-3 py-1 rounded"
+                      >
+                        📋 Copy
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className=" text-center  rounded font-bold text-orange-500">
+                Unlocks in {formatTime(Math.max(timeLeft - 2 * 60 * 1000, 0))}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* PAYMENT MODAL (Paid) */}
+      {showForm && !isFreeContest && (
+        <UTRModal
+          contestId={contestId}
+          user={currentUser}
+          close={() => setShowForm(false)}
+        />
+      )}
+
+      {/* JOIN DETAILS MODAL (Free) */}
+      {showJoinModal && (
+        <JoinContestModal
+          contestId={contestId}
+          user={currentUser}
+          isJoining={joining}
+          onClose={() => setShowJoinModal(false)}
+          onJoinInfoSubmit={(details) => joinContestNow(details)}
+        />
+      )}
     </>
   );
 }
