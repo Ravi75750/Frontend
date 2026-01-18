@@ -25,11 +25,17 @@ export default function Header({ onLoginClick, onSignUpClick }) {
               alt="Logo"
               className="h-20 w-auto object-contain -mt-2 -ml-3 md:ml-0" // -mt-2 logo ko upar shift karega
             />
-            <span className="text-4xl font-black italic tracking-tighter uppercase self-center 
-                 text-[#9ce2f9] 
+            <span className="text-4xl font-extrabold italic tracking-tighter uppercase self-center 
+                 bg-gradient-to-t from-red-600 via-orange-500 to-yellow-400 bg-clip-text text-transparent
+                 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]
                  absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0
-                 hover:text-[#f14e08] transition-all duration-300 cursor-pointer">
-              FireContests
+                 cursor-pointer"
+              style={{
+                fontFamily: "'Segoe UI', Roboto, sans-serif",
+                WebkitTextStroke: "1px #801818" // Adds the darker border effect seen in the reference
+              }}
+            >
+              FIRE LEAGUE
             </span>
           </Link>
 

@@ -52,26 +52,60 @@ export default function Highlights() {
       ) : (
 
         <div className="grid md:grid-cols-3 gap-8">
-          {videos.map((v) => (
-            <div key={v._id} className="bg-gray-800 rounded-lg overflow-hidden">
-              <img
-                src={v.thumbnail || "/default-thumb.jpg"}
-                alt={v.title}
-                className="rounded-md w-full h-[200px] object-cover"
-              />
-              <div className="p-4">
-                <h3 className="font-bold text-lg">{v.title}</h3>
-                <a
-                  href={v.videoURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 mt-2 inline-block"
-                >
-                  ▶ Watch Video
-                </a>
+          {videos.map((v) => {
+            // Extract video ID for embed if possible (though we have full URL, we need to be careful with embed)
+            // If we stored just URL, we need to extract ID again or use an embeddable URL.
+            // Let's assume standard YouTube links.
+            let videoId = null;
+            try {
+              const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+              const match = v.videoURL.match(regex);
+              if (match && match[1]) videoId = match[1];
+            } catch (e) {
+              console.error("Invalid URL", v.videoURL);
+            }
+
+            return (
+              <div key={v._id} className="bg-gray-800 rounded-lg overflow-hidden flex flex-col">
+                {/* Video Container - Aspect Ratio 16:9 */}
+                <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+                  {videoId ? (
+                    <iframe
+                      className="absolute top-0 left-0 w-full h-full"
+                      src={`https://www.youtube.com/embed/${videoId}`}
+                      title={v.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen>
+                    </iframe>
+                  ) : (
+                    /* Fallback if not a valid YouTube ID found */
+                    <img
+                      src={v.thumbnail || "/default-thumb.jpg"}
+                      alt={v.title}
+                      className="absolute top-0 left-0 w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="font-bold text-lg mb-2">{v.title}</h3>
+                  {v.date && <p className="text-gray-400 text-sm mb-2">{new Date(v.date).toLocaleDateString()}</p>}
+
+                  {!videoId && (
+                    <a
+                      href={v.videoURL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 mt-auto inline-block"
+                    >
+                      ▶ Watch Video
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

@@ -40,3 +40,41 @@ body {
 .animate-slide-down {
   animation: slideDown 0.25s ease-out;
 }
+
+/* FIRE ANIMATION */
+@keyframes fireAnimation {
+  0% {
+    text-shadow: 
+      0 0 4px #fefcc9, 
+      2px -5px 6px #feec85, 
+      -4px -10px 10px #ffae34, 
+      4px -20px 15px #ec760c, 
+      -4px -30px 20px #cd4606;
+    color: #ffb84c;
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 
+      0 0 5px #fefcc9, 
+      3px -8px 8px #feec85, 
+      -5px -15px 12px #ffae34, 
+      5px -25px 20px #ec760c, 
+      -5px -35px 25px #cd4606;
+    color: #ffaa1d;
+    transform: scale(1.02);
+  }
+  100% {
+    text-shadow: 
+      0 0 4px #fefcc9, 
+      2px -5px 6px #feec85, 
+      -4px -10px 10px #ffae34, 
+      4px -20px 15px #ec760c, 
+      -4px -30px 20px #cd4606;
+    color: #ffb84c;
+    transform: scale(1);
+  }
+}
+
+.fire-text {
+  animation: fireAnimation 1.5s ease-in-out infinite alternate;
+}

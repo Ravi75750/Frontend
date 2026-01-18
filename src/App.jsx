@@ -20,6 +20,7 @@ import UserLayout from "./components/UserLayout";
 // ADMIN
 import AdminLayout from "./admin/AdminLayout";
 import AdminLogin from "./admin/AdminLogin";
+import AdminGuard from "./admin/AdminGuard"; // ✅ New Guard
 import Dashboard from "./admin/Dashboard";
 import UsersPage from "./admin/UsersPage";
 import ContestsPage from "./admin/ContestsPage";
@@ -32,6 +33,10 @@ import VerifyPayments from "./admin/VerifyPayment";
 import AdminSettings from "./admin/AdminSettings";
 import { AdminSearchProvider } from "./admin/AdminSearchContext";
 
+// ✅ AOS Animation
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 export default function App() {
     const { user } = useUser();
 
@@ -42,6 +47,15 @@ export default function App() {
 
     // 🟢 Read admin token
     const isAdmin = localStorage.getItem("adminToken");
+
+    // ✅ Initialize AOS
+    useEffect(() => {
+        AOS.init({
+            duration: 800, // Animation duration (ms)
+            easing: "ease-out", // Easing
+            once: true, // Only animate once
+        });
+    }, []);
 
     // 2. Effect to sync modal with user login status
     useEffect(() => {
@@ -133,13 +147,11 @@ export default function App() {
                         <Route
                             path="/admin/*"
                             element={
-                                localStorage.getItem("adminToken") ? (
+                                <AdminGuard>
                                     <AdminSearchProvider>
                                         <AdminLayout />
                                     </AdminSearchProvider>
-                                ) : (
-                                    <Navigate to="/admin/login" replace />
-                                )
+                                </AdminGuard>
                             }
                         >
                             <Route path="dashboard" element={<Dashboard />} />

@@ -85,10 +85,12 @@ export default function AdminHighlights() {
               <a
                 href={h.videoURL}
                 target="_blank"
-                className="text-blue-400 hover:underline text-sm"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:underline text-sm block mb-1"
               >
                 ▶ Watch Video
               </a>
+              {h.date && <p className="text-gray-500 text-xs">{new Date(h.date).toLocaleDateString()}</p>}
 
               <button
                 className="w-full mt-3 bg-red-600 py-2 rounded hover:bg-red-700 font-semibold"

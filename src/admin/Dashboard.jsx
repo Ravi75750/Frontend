@@ -20,6 +20,10 @@ export default function Dashboard() {
   const [openContest, setOpenContest] = useState(null);
   const [error, setError] = useState(null);
 
+  // ✅ New State for Modal
+  const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [endingContestId, setEndingContestId] = useState(null);
+
   const intervalRef = useRef(null);
   const token = localStorage.getItem("adminToken");
 
@@ -42,6 +46,28 @@ export default function Dashboard() {
       setError("Failed to fetch dashboard data");
     } finally {
       if (!silent) setLoading(false);
+    }
+  };
+
+  /* ================= END CONTEST ================= */
+  const handleEndContest = async (contestId) => {
+    if (!confirm("Are you sure you want to END this contest? It will be marked as COMPLETED.")) return;
+
+    setEndingContestId(contestId);
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL || "/api"}/admin/contest/${contestId}/finish`,
+        { winner: "TBD", killPoints: 0 }, // Default values, can be updated later if needed
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // Refresh
+      fetchDashboard(true);
+      setOpenContest(null);
+      alert("Contest Ended Successfully");
+    } catch (err) {
+      alert("Failed to end contest");
+    } finally {
+      setEndingContestId(null);
     }
   };
 
@@ -218,52 +244,61 @@ export default function Dashboard() {
                     <tr className="bg-slate-800/60">
                       <td colSpan={5} className="px-6 py-4">
                         <div className="space-y-4">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-slate-400">
-                              Total Collected
-                            </span>
-                            <span className="font-semibold text-emerald-400">
-                              ₹ {c.totalCollected}
-                            </span>
-                          </div>
 
-                          <div className="flex justify-between text-sm">
-                            <span className="text-slate-400">
-                              Paid Players
-                            </span>
-                            <span>{c.paidPlayers}</span>
-                          </div>
+                          {/* 🔴 END CONTEST BUTTON (If LIVE) */}
+                          {c.status === "LIVE" && (
+                            <div className="flex justify-end mb-4">
+                              <button
+                                onClick={(e) => { e.stopPropagation(); handleEndContest(c._id); }}
+                                disabled={endingContestId === c._id}
+                                className="bg-red-600 text-white px-4 py-2 rounded font-bold hover:bg-red-700 disabled:opacity-50"
+                              >
+                                {endingContestId === c._id ? "Ending..." : "⚠️ End Contest Now"}
+                              </button>
+                            </div>
+                          )}
 
-                          <div className="flex justify-between text-sm">
-                            <span className="text-slate-400">
-                              Free Joins
-                            </span>
-                            <span>{c.freePlayers}</span>
-                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* LEFT COLUMN: Revenue Stats */}
+                            <div className="space-y-3 bg-slate-900/50 p-4 rounded-lg">
+                              <h4 className="text-emerald-400 font-bold mb-2">💰 Revenue Stats</h4>
+                              <div className="flex justify-between text-sm">
+                                <span className="text-slate-400">Total Collected</span>
+                                <span className="font-semibold text-emerald-400">₹ {c.totalCollected}</span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                <span className="text-slate-400">Paid Players</span>
+                                <span>{c.paidPlayers}</span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                <span className="text-slate-400">Free Joins</span>
+                                <span>{c.freePlayers}</span>
+                              </div>
+                            </div>
 
-                          <div>
-                            <p className="text-slate-400 mb-2 text-sm">
-                              Player Payments
-                            </p>
-
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                              {c.playerPayments.map((p, i) => (
-                                <div
-                                  key={i}
-                                  className="bg-slate-900 px-3 py-2 rounded flex justify-between text-xs"
-                                >
-                                  <span>{p.username}</span>
-                                  <span
-                                    className={
-                                      p.amount === 0
-                                        ? "text-slate-400"
-                                        : "text-emerald-400"
-                                    }
-                                  >
-                                    ₹ {p.amount}
-                                  </span>
+                            {/* RIGHT COLUMN: Participant Details */}
+                            <div className="space-y-3 bg-slate-900/50 p-4 rounded-lg">
+                              <h4 className="text-blue-400 font-bold mb-2">👥 Participants</h4>
+                              {c.participants && c.participants.length > 0 ? (
+                                <div className="max-h-60 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+                                  {c.participants.map((p, idx) => (
+                                    <div key={idx} className="flex justify-between items-center bg-slate-800 p-2 rounded text-xs">
+                                      <div>
+                                        <span className="text-yellow-400 font-bold mr-2">#{p.slotIndex}</span>
+                                        <span className="font-semibold">{p.userId?.username || "Unknown"}</span>
+                                      </div>
+                                      <button
+                                        onClick={(e) => { e.stopPropagation(); setSelectedParticipant(p); }}
+                                        className="text-[#9ce2f9] hover:underline"
+                                      >
+                                        View Details
+                                      </button>
+                                    </div>
+                                  ))}
                                 </div>
-                              ))}
+                              ) : (
+                                <p className="text-slate-500 text-sm">No participants yet.</p>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -276,6 +311,43 @@ export default function Dashboard() {
           </tbody>
         </table>
       </div>
+
+      {/* ✅ PARTICIPANT DETAILS MODAL */}
+      {selectedParticipant && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" onClick={() => setSelectedParticipant(null)}>
+          <div className="bg-[#0f1f2e] border border-gray-600 w-full max-w-sm rounded-xl p-6 relative shadow-2xl" onClick={e => e.stopPropagation()}>
+            <h3 className="text-xl font-bold text-white mb-4 border-b border-gray-700 pb-2">
+              Participant Details
+            </h3>
+
+            <div className="space-y-3">
+              <div>
+                <p className="text-gray-400 text-xs uppercase">Username</p>
+                <p className="text-white font-semibold text-lg">{selectedParticipant.userId?.username || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-xs uppercase">In-Game Name</p>
+                <p className="text-yellow-400 font-mono text-lg">{selectedParticipant.inGameName || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-xs uppercase">In-Game ID</p>
+                <p className="text-blue-300 font-mono text-lg">{selectedParticipant.inGameId || "N/A"}</p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-xs uppercase">UPI ID</p>
+                <p className="text-green-400 font-mono text-lg">{selectedParticipant.upiId || "N/A"}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setSelectedParticipant(null)}
+              className="mt-6 w-full bg-red-600 hover:bg-red-700 py-2 rounded text-white font-bold"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

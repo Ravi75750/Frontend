@@ -4,6 +4,8 @@ import toast from "react-hot-toast";
 import UTRModal from "./UTRModal";
 import JoinContestModal from "./JoinContestModal";
 
+import { Users, Ticket } from "lucide-react";
+
 export default function ContestCard({ contest, user, onJoinedContest }) {
   const [showForm, setShowForm] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false); // ✅ New state
@@ -134,12 +136,9 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
     } else {
       // Paid contest
       if (verified) {
-        // It's paid and verified. The backend will pull details from Payment.
-        // We can just call joinContestNow without extra data (or with empty/dummy).
-        // BUT wait, does the Payment record HAVE InGameName/ID? Yes, UTRModal sends fullName/ffid.
-        // What about UPI? Payment has UTR. Backend maps UTR to UPI.
-        // So for PAID contest, we DO NOT need the modal.
-        joinContestNow({});
+        // It's paid and verified. 
+        // ✅ NEW REQUEST: Show the modal so user can enter Game Name, Game ID, UPI
+        setShowJoinModal(true);
       } else {
         // Not verified/not paid yet
         setShowForm(true); // Open UTR Modal
@@ -192,7 +191,10 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
   /* ================= UI ================= */
   return (
     <>
-      <div className="bg-[#0d192b] border border-gray-700 rounded-xl p-4 relative">
+      <div
+        className="bg-[#0d192b] border border-gray-700 rounded-xl p-4 relative"
+        data-aos="fade-up" // ✅ Animate on scroll
+      >
         {isLive ? (
           <span className="absolute top-3 right-3 bg-red-600 text-white text-xs px-3 py-1 rounded animate-pulse">
             🔴 LIVE
@@ -209,14 +211,61 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
           className="rounded-lg h-[200px] w-full object-cover"
         />
 
-        <h2 className="text-white text-xl font-bold mt-4 text-center">
+        <h2 className="text-white text-xl font-bold mt-4 mb-2 truncate px-1">
           {contest.title}
         </h2>
 
-        <p className="text-gray-300 text-center">Entry Fee: ₹{entryFee}</p>
-        <p className="text-gray-300 text-center mt-1">
-          Players: <b>{playerCount}</b> / {contest.maxPlayers}
-        </p>
+        {/* INFO ROW: Fee & Players */}
+        <div className="flex justify-between items-center bg-gray-800/50 rounded-lg p-2 mb-3">
+          <div className="flex items-center space-x-2 text-gray-300">
+            <Ticket className="w-4 h-4 text-green-400" />
+            <span className="font-semibold text-sm">₹{entryFee}</span>
+          </div>
+          <div className="flex items-center space-x-2 text-gray-300">
+            <Users className="w-4 h-4 text-blue-400" />
+            <span className="font-semibold text-sm">
+              {playerCount}/{contest.maxPlayers}
+            </span>
+          </div>
+        </div>
+
+        {/* 🏆 REWARDS SECTION */}
+        {(contest.rewards?.first || contest.rewards?.second) && (
+          <div className="mt-3 bg-white rounded-xl p-3 shadow-inner">
+            <div className="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
+              <span className="text-gray-500 text-xs font-bold tracking-widest uppercase">Prize Pool</span>
+              <span className="text-emerald-600 font-extrabold text-lg">
+                {/* Attempt to sum if they are numbers, else just show 'Prizes' */}
+                {contest.rewards.first && contest.rewards.second
+                  ? `₹${(parseInt(contest.rewards.first.replace(/\D/g, "") || 0) +
+                    parseInt(contest.rewards.second.replace(/\D/g, "") || 0) +
+                    parseInt(contest.rewards.third?.replace(/\D/g, "") || 0)).toLocaleString()}`
+                  : "PRIZES"}
+              </span>
+            </div>
+
+            <div className="space-y-1">
+              {contest.rewards.first && (
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-600 font-bold">1st Prize</span>
+                  <span className="text-yellow-600 font-bold">{contest.rewards.first.includes("₹") ? contest.rewards.first : `₹${contest.rewards.first}`}</span>
+                </div>
+              )}
+              {contest.rewards.second && (
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-500 font-medium">2nd Prize</span>
+                  <span className="text-gray-800 font-bold">{contest.rewards.second.includes("₹") ? contest.rewards.second : `₹${contest.rewards.second}`}</span>
+                </div>
+              )}
+              {contest.rewards.third && (
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-orange-500 font-medium">3rd Prize</span>
+                  <span className="text-gray-800 font-bold">{contest.rewards.third.includes("₹") ? contest.rewards.third : `₹${contest.rewards.third}`}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {timeLeft !== null && !isLive && (
           <p className="text-center mt-2 text-yellow-400 font-semibold">
@@ -269,83 +318,89 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
             View Room Details
           </button>
         )}
-      </div>
+      </div >
 
       {/* ROOM MODAL */}
-      {showRoomModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-          <div className="bg-[#143c46] w-[90%] max-w-md rounded-lg p-5 text-[#9ce2f9] relative">
-            <button
-              onClick={() => setShowRoomModal(false)}
-              className="absolute top-2 right-3 text-xl font-bold"
-            >
-              ✕
-            </button>
+      {
+        showRoomModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+            <div className="bg-[#143c46] w-[90%] max-w-md rounded-lg p-5 text-[#9ce2f9] relative">
+              <button
+                onClick={() => setShowRoomModal(false)}
+                className="absolute top-2 right-3 text-xl font-bold"
+              >
+                ✕
+              </button>
 
-            <h2 className="text-2xl font-bold mb-3 text-center">
-              Room Details
-            </h2>
+              <h2 className="text-2xl font-bold mb-3 text-center">
+                Room Details
+              </h2>
 
-            {/* ✅ SHOW SLOT NUMBER */}
-            <div className="bg-gray-800 p-3 rounded mb-3 text-center border border-yellow-500">
-              <p className="text-gray-400 text-xs uppercase">Your Slot Number</p>
-              <p className="text-3xl font-bold text-yellow-400">
-                {myParticipantInfo?.slotIndex || "N/A"}
-              </p>
-            </div>
-
-
-            {canShowRoomDetails ? (
-              <div className="space-y-3">
-                {["Room ID", "Password"].map((label, i) => {
-                  const value = i === 0 ? contest.roomId : contest.roomPass;
-                  return (
-                    <div
-                      key={label}
-                      className="flex justify-between items-center bg-gray-100 p-2 rounded"
-                    >
-                      <div>
-                        <p className="text-xs text-gray-500">{label}</p>
-                        <p className="font-bold text-black">{value || "N/A"}</p>
-                      </div>
-                      <button
-                        onClick={() => copyToClipboard(value, label)}
-                        className="bg-blue-600 text-white px-3 py-1 rounded"
-                      >
-                        📋 Copy
-                      </button>
-                    </div>
-                  );
-                })}
+              {/* ✅ SHOW SLOT NUMBER */}
+              <div className="bg-gray-800 p-3 rounded mb-3 text-center border border-yellow-500">
+                <p className="text-gray-400 text-xs uppercase">Your Slot Number</p>
+                <p className="text-3xl font-bold text-yellow-400">
+                  {myParticipantInfo?.slotIndex || "N/A"}
+                </p>
               </div>
-            ) : (
-              <p className=" text-center  rounded font-bold text-orange-500">
-                Unlocks in {formatTime(Math.max(timeLeft - 2 * 60 * 1000, 0))}
-              </p>
-            )}
+
+
+              {canShowRoomDetails ? (
+                <div className="space-y-3">
+                  {["Room ID", "Password"].map((label, i) => {
+                    const value = i === 0 ? contest.roomId : contest.roomPass;
+                    return (
+                      <div
+                        key={label}
+                        className="flex justify-between items-center bg-gray-100 p-2 rounded"
+                      >
+                        <div>
+                          <p className="text-xs text-gray-500">{label}</p>
+                          <p className="font-bold text-black">{value || "N/A"}</p>
+                        </div>
+                        <button
+                          onClick={() => copyToClipboard(value, label)}
+                          className="bg-blue-600 text-white px-3 py-1 rounded"
+                        >
+                          📋 Copy
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className=" text-center  rounded font-bold text-orange-500">
+                  Unlocks in {formatTime(Math.max(timeLeft - 2 * 60 * 1000, 0))}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* PAYMENT MODAL (Paid) */}
-      {showForm && !isFreeContest && (
-        <UTRModal
-          contestId={contestId}
-          user={currentUser}
-          close={() => setShowForm(false)}
-        />
-      )}
+      {
+        showForm && !isFreeContest && (
+          <UTRModal
+            contestId={contestId}
+            user={currentUser}
+            close={() => setShowForm(false)}
+          />
+        )
+      }
 
       {/* JOIN DETAILS MODAL (Free) */}
-      {showJoinModal && (
-        <JoinContestModal
-          contestId={contestId}
-          user={currentUser}
-          isJoining={joining}
-          onClose={() => setShowJoinModal(false)}
-          onJoinInfoSubmit={(details) => joinContestNow(details)}
-        />
-      )}
+      {
+        showJoinModal && (
+          <JoinContestModal
+            contestId={contestId}
+            user={currentUser}
+            isJoining={joining}
+            onClose={() => setShowJoinModal(false)}
+            onJoinInfoSubmit={(details) => joinContestNow(details)}
+          />
+        )
+      }
     </>
   );
 }

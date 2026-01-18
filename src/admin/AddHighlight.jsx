@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 export default function AddHighlight() {
   const [title, setTitle] = useState("");
   const [videoURL, setVideoURL] = useState("");
+  const [date, setDate] = useState("");
 
   const token = localStorage.getItem("adminToken");
 
@@ -19,13 +20,14 @@ export default function AddHighlight() {
     try {
       await axios.post(
         `${import.meta.env.VITE_API_URL || "/api"}/highlights`,
-        { title, videoURL },
+        { title, videoURL, date },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       toast.success("Highlight uploaded!");
       setTitle("");
       setVideoURL("");
+      setDate("");
     } catch (err) {
       console.error(err);
       toast.error("Failed to upload highlight");
@@ -49,9 +51,16 @@ export default function AddHighlight() {
 
         <input
           className="w-full p-3 rounded bg-gray-700 outline-none"
-          placeholder="Paste JioCloud Video Link"
+          placeholder="Paste YouTube Video Link"
           value={videoURL}
           onChange={(e) => setVideoURL(e.target.value)}
+        />
+
+        <input
+          type="date"
+          className="w-full p-3 rounded bg-gray-700 outline-none text-white appearance-none"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
         />
 
         <button

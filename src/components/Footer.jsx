@@ -99,15 +99,15 @@ export default function Footer() {
               className="w-full p-2 h-28 rounded bg-[#143c46]  border border-gray-600 text-white"
             />
 
-          <div className="max-w-full flex justify-center">
+            <div className="max-w-full flex justify-center">
               <button
-              type="submit"
-              className="w-[200px]  bg-blue-600 py-2 rounded-lg text-white font-bold hover:bg-orange-600 transition"
-            >
-              Send Message
-            </button>
+                type="submit"
+                className="w-[200px]  bg-blue-600 py-2 rounded-lg text-white font-bold hover:bg-orange-600 transition"
+              >
+                Send Message
+              </button>
 
-          </div>
+            </div>
           </form>
 
           {status && (
@@ -118,9 +118,14 @@ export default function Footer() {
         </div>
 
         {/* COPYRIGHT */}
-        <p className="text-gray-400 text-sm text-center mt-6">
-          Made with ❤️ by <span className="font-semibold">Ravi Sahani</span>.
-        </p>
+        <div className="text-center mt-6">
+          <p className="text-gray-400 text-sm">
+            Made with ❤️ by <span className="font-semibold">Ravi Sahani</span>.
+          </p>
+          <a href="/admin/login" className="text-gray-600 hover:text-gray-400 text-xs mt-2 inline-block">
+            Admin Login
+          </a>
+        </div>
       </div>
     </footer>
   );

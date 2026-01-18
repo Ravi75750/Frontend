@@ -7,6 +7,11 @@ export default function CreateContest() {
   const [maxPlayers, setMaxPlayers] = useState("");
   const [matchTime, setMatchTime] = useState("");
 
+  // ✅ Rewards State
+  const [firstReward, setFirstReward] = useState("");
+  const [secondReward, setSecondReward] = useState("");
+  const [thirdReward, setThirdReward] = useState("");
+
   const [imageFile, setImageFile] = useState(null);
 
   const [loading, setLoading] = useState(false);
@@ -43,6 +48,11 @@ export default function CreateContest() {
       formData.append("maxPlayers", maxPlayers);
       formData.append("matchTime", matchTime);
 
+      // ✅ Append Rewards
+      formData.append("firstReward", firstReward);
+      formData.append("secondReward", secondReward);
+      formData.append("thirdReward", thirdReward);
+
       // Capture rewards from DOM elements (quick fix since verify state management would take longer)
       // Ideally should bind to state, but inputs were added manually above. 
       // I will update the form above to bind to state properly in next step if this fails, 
@@ -75,6 +85,9 @@ export default function CreateContest() {
       setMaxPlayers("");
       setMatchTime("");
       setImageFile(null);
+      setFirstReward("");
+      setSecondReward("");
+      setThirdReward("");
     } catch (err) {
       setMsg(err.response?.data?.msg || "Server Error");
     } finally {
@@ -132,7 +145,42 @@ export default function CreateContest() {
           />
         </div>
 
-        {/* REWARDS */}
+        {/* REWARDS SECTION */}
+        <div className="bg-gray-700/50 p-4 rounded border border-gray-600">
+          <h3 className="font-bold text-lg mb-3 text-yellow-400">🏆 Rewards</h3>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="block text-sm mb-1 text-gray-300">1st Prize</label>
+              <input
+                type="text"
+                className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:border-yellow-400 outline-none"
+                value={firstReward}
+                onChange={(e) => setFirstReward(e.target.value)}
+                placeholder="e.g. ₹500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1 text-gray-300">2nd Prize</label>
+              <input
+                type="text"
+                className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:border-gray-400 outline-none"
+                value={secondReward}
+                onChange={(e) => setSecondReward(e.target.value)}
+                placeholder="e.g. ₹250"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1 text-gray-300">3rd Prize</label>
+              <input
+                type="text"
+                className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:border-orange-400 outline-none"
+                value={thirdReward}
+                onChange={(e) => setThirdReward(e.target.value)}
+                placeholder="e.g. ₹100"
+              />
+            </div>
+          </div>
+        </div>
 
 
         {/* MATCH START TIME */}

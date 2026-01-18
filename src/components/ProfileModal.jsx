@@ -20,7 +20,7 @@ export default function ProfileModal({ onClose }) {
     // Set a timeout for 2000 milliseconds (2 seconds)
     const timer = setTimeout(() => {
       setIsLoading(false); // Stop loading after 2 seconds
-    }, 2000);
+    }, 1500);
 
     // Cleanup function: Clear the timeout if the component unmounts early
     return () => clearTimeout(timer);
