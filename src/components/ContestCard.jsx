@@ -230,7 +230,7 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
         </div>
 
         {/* 🏆 REWARDS SECTION */}
-        {(contest.rewards?.first || contest.rewards?.second) && (
+        {(contest.rewards?.first || contest.rewards?.second || contest.rewards?.third) && (
           <div className="mt-3 bg-white rounded-xl p-3 shadow-inner">
             <div className="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
               <span className="text-gray-500 text-xs font-bold tracking-widest uppercase">Prize Pool</span>
@@ -340,7 +340,7 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
               <div className="bg-gray-800 p-3 rounded mb-3 text-center border border-yellow-500">
                 <p className="text-gray-400 text-xs uppercase">Your Slot Number</p>
                 <p className="text-3xl font-bold text-yellow-400">
-                  {myParticipantInfo?.slotIndex || "N/A"}
+                  {myParticipantInfo?.slotIndex || (contest.participants.indexOf(myParticipantInfo) + 1) || "N/A"}
                 </p>
               </div>
 

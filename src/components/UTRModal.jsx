@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 export default function UTRModal({ contestId, close, user }) {
   const [name, setName] = useState("");
-  const [ffid, setFFID] = useState("");
+  // const [ffid, setFFID] = useState(""); // Removed
   const [utr, setUtr] = useState("");
   const [file, setFile] = useState(null);
   const [qrCodeUrl, setQrCodeUrl] = useState("/qrcode.png"); // Default fallback
@@ -44,7 +44,7 @@ export default function UTRModal({ contestId, close, user }) {
     }
     // --- FIX END ---
 
-    if (!name || !ffid || !utr || !file) {
+    if (!name || !utr || !file) {
       return toast.error("All fields including screenshot required!");
     }
 
@@ -52,7 +52,7 @@ export default function UTRModal({ contestId, close, user }) {
     formData.append("userId", uid);
     formData.append("contestId", contestId);
     formData.append("fullName", name);
-    formData.append("ffid", ffid);
+    // formData.append("ffid", ffid);
     formData.append("utr", utr);
     if (file) formData.append("screenshot", file);
 
@@ -86,9 +86,6 @@ export default function UTRModal({ contestId, close, user }) {
           <input className="input border bg-[#74959e] border-gray-300 p-2 rounded w-full text-black" placeholder="Full Name"
             value={name} onChange={(e) => setName(e.target.value)} />
 
-          <input className="input border bg-[#74959e] border-gray-300 p-2 rounded w-full text-white" placeholder="Free Fire ID"
-            value={ffid} onChange={(e) => setFFID(e.target.value)} />
-
           <input className="input border bg-[#74959e] border-gray-300 p-2 rounded w-full text-white" placeholder="UTR / Transaction ID"
             value={utr} onChange={(e) => setUtr(e.target.value)} />
 
@@ -96,10 +93,12 @@ export default function UTRModal({ contestId, close, user }) {
             onChange={(e) => setFile(e.target.files[0])}
             className="p-2 border bg-[#74959e] border-gray-300 rounded w-full text-white" />
 
-          <button type="submit"
-            className="w-auto bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg font-bold">
-            Submit Entry
-          </button>
+          <div className="max-w-full flex justify-center">
+            <button type="submit"
+              className="w-auto bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg font-bold">
+              Submit Entry
+            </button>
+          </div>
         </form>
 
         <button

@@ -40,6 +40,14 @@ const ContestList = ({ user }) => {
           ))}
         </div>
       )}
+
+      {/* WHATSAPP GROUP BANNER */}
+      <div className="mx-8 mt-8 bg-green-600/20 border border-green-500 rounded p-4 text-center cursor-pointer hover:bg-green-600/30 transition shadow-[0_0_15px_rgba(22,163,74,0.3)]">
+        <a href="https://chat.whatsapp.com/J0jElc84kuv1UfDZ8pwYM0" target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+          <h3 className="text-xl font-bold text-green-400 mb-1">📢 Join Our Official WhatsApp Group</h3>
+          <p className="text-gray-300">Click here to get latest contest updates & room passwords instantly!</p>
+        </a>
+      </div>
     </section>
   );
 };
