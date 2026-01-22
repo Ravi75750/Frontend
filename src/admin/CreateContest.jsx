@@ -36,11 +36,10 @@ export default function CreateContest() {
         return;
       }
 
-      if (!matchTime) {
-        setMsg("Match start time is required");
-        setLoading(false);
-        return;
-      }
+      /* 
+       * matchTime is now OPTIONAL. 
+       * If not provided, contest is created as "Coming Soon".
+       */
 
       const formData = new FormData();
       formData.append("title", title);
@@ -193,7 +192,7 @@ export default function CreateContest() {
             className="w-full p-2 rounded bg-gray-700"
             value={matchTime}
             onChange={(e) => setMatchTime(e.target.value)}
-            required
+            // required  <-- Removed to allow optional date
             name="matchTime"
           />
         </div>

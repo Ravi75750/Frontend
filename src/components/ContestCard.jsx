@@ -83,7 +83,7 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
   };
 
   /* ================= ROOM UNLOCK (2 MIN) ================= */
-  const canShowRoomDetails =
+  const canShowRoomDetails = contest.matchTime &&
     timeLeft !== null && timeLeft <= 2 * 60 * 1000;
 
   /* ================= JOIN + PAYMENT STATUS ================= */
@@ -267,9 +267,15 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
           </div>
         )}
 
-        {timeLeft !== null && !isLive && (
-          <p className="text-center mt-2 text-yellow-400 font-semibold">
-            Starts in: {formatTime(timeLeft)}
+        {contest.matchTime ? (
+          timeLeft !== null && !isLive && (
+            <p className="text-center mt-2 text-yellow-400 font-semibold">
+              Starts in: {formatTime(timeLeft)}
+            </p>
+          )
+        ) : (
+          <p className="text-center mt-2 text-blue-400 font-bold uppercase tracking-widest">
+            Coming Soon
           </p>
         )}
 
@@ -370,7 +376,10 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
                 </div>
               ) : (
                 <p className=" text-center  rounded font-bold text-orange-500">
-                  Unlocks in {formatTime(Math.max(timeLeft - 2 * 60 * 1000, 0))}
+                  {contest.matchTime
+                    ? `Unlocks in ${formatTime(Math.max(timeLeft - 2 * 60 * 1000, 0))}`
+                    : "Date & Time Coming Soon"
+                  }
                 </p>
               )}
             </div>

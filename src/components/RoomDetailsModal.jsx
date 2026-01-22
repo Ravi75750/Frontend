@@ -5,11 +5,16 @@ import toast from "react-hot-toast";
 export default function RoomDetailsModal({ contest, onClose, onUpdated }) {
   const [roomId, setRoomId] = useState(contest.roomId || "");
   const [roomPass, setRoomPass] = useState(contest.roomPass || "");
+  // ✅ New: Match Time
+  const [matchTime, setMatchTime] = useState(
+    contest.matchTime ? new Date(contest.matchTime).toISOString().slice(0, 16) : ""
+  );
   const [saving, setSaving] = useState(false);
 
   const save = async () => {
-    if (!roomId.trim() || !roomPass.trim()) {
-      return toast.error("Room ID and Password are required");
+    // Validations: If setting Room ID, must have Pass. But Date is independent.
+    if ((roomId && !roomPass) || (!roomId && roomPass)) {
+      return toast.error("Both Room ID and Password are required if one is provided");
     }
 
     const token = localStorage.getItem("adminToken");
@@ -21,10 +26,11 @@ export default function RoomDetailsModal({ contest, onClose, onUpdated }) {
       setSaving(true);
 
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL || "/api"}/admin/contest/${contest._id}/room`,
+        `${import.meta.env.VITE_API_URL || "/api"}/admin/contest/${contest._id}/details`,
         {
           roomId: roomId.trim(),
           roomPass: roomPass.trim(),
+          matchTime: matchTime || null, // sending null if empty string
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -60,6 +66,18 @@ export default function RoomDetailsModal({ contest, onClose, onUpdated }) {
 
         <div className="mb-3">
           <label className="block text-sm text-gray-300 mb-1">
+            Match Start Time (Optional)
+          </label>
+          <input
+            type="datetime-local"
+            className="w-full p-2 bg-gray-700 rounded text-white outline-none focus:ring-2 focus:ring-yellow-500"
+            value={matchTime}
+            onChange={(e) => setMatchTime(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="block text-sm text-gray-300 mb-1">
             Room ID
           </label>
           <input
@@ -87,7 +105,7 @@ export default function RoomDetailsModal({ contest, onClose, onUpdated }) {
           disabled={saving}
           className="w-full bg-green-600 hover:bg-green-500 disabled:opacity-60 py-2 rounded font-bold text-black"
         >
-          {saving ? "Saving..." : "Save Room Details"}
+          {saving ? "Saving..." : "Save Details"}
         </button>
 
         {/* INFO */}
