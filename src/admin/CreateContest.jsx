@@ -45,7 +45,7 @@ export default function CreateContest() {
       formData.append("title", title);
       formData.append("entryFee", entryFee);
       formData.append("maxPlayers", maxPlayers);
-      formData.append("matchTime", matchTime);
+      if (matchTime) formData.append("matchTime", matchTime);
 
       // ✅ Append Rewards
       formData.append("firstReward", firstReward);
@@ -187,14 +187,18 @@ export default function CreateContest() {
           <label className="block mb-1 font-bold">
             Match Start Time
           </label>
+          <div className="w-full p-2 rounded bg-gray-700 text-gray-400 italic border border-gray-600">
+            Coming Soon
+          </div>
+          {/* 
           <input
             type="datetime-local"
             className="w-full p-2 rounded bg-gray-700"
             value={matchTime}
             onChange={(e) => setMatchTime(e.target.value)}
-            // required  <-- Removed to allow optional date
             name="matchTime"
-          />
+          /> 
+          */}
         </div>
 
         {/* CONTEST IMAGE */}

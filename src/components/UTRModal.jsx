@@ -4,9 +4,10 @@ import toast from "react-hot-toast";
 
 export default function UTRModal({ contestId, close, user }) {
   const [name, setName] = useState("");
-  // const [ffid, setFFID] = useState(""); // Removed
+
   const [utr, setUtr] = useState("");
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false); // Added loading state
   const [qrCodeUrl, setQrCodeUrl] = useState("/qrcode.png"); // Default fallback
 
   // Fetch dynamic QR code
@@ -52,11 +53,12 @@ export default function UTRModal({ contestId, close, user }) {
     formData.append("userId", uid);
     formData.append("contestId", contestId);
     formData.append("fullName", name);
-    // formData.append("ffid", ffid);
+
     formData.append("utr", utr);
     if (file) formData.append("screenshot", file);
 
     try {
+      setLoading(true); // Start loading
       await axios.post(`${import.meta.env.VITE_API_URL || "/api"}/payments/submit`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -66,6 +68,8 @@ export default function UTRModal({ contestId, close, user }) {
       console.log("Submit Error:", err);
       const msg = err.response?.data?.msg || "Failed to submit entry";
       toast.error(msg);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -95,8 +99,9 @@ export default function UTRModal({ contestId, close, user }) {
 
           <div className="max-w-full flex justify-center">
             <button type="submit"
-              className="w-auto bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg font-bold">
-              Submit Entry
+              disabled={loading}
+              className={`w-auto bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg font-bold cursor-pointer ${loading ? "opacity-75 cursor-wait" : ""}`}>
+              {loading ? "Submitting..." : "Submit Entry"}
             </button>
           </div>
         </form>
