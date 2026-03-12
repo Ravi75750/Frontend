@@ -187,18 +187,13 @@ export default function CreateContest() {
           <label className="block mb-1 font-bold">
             Match Start Time
           </label>
-          <div className="w-full p-2 rounded bg-gray-700 text-gray-400 italic border border-gray-600">
-            Coming Soon
-          </div>
-          {/* 
           <input
             type="datetime-local"
-            className="w-full p-2 rounded bg-gray-700"
+            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:border-blue-400 outline-none"
             value={matchTime}
             onChange={(e) => setMatchTime(e.target.value)}
-            name="matchTime"
-          /> 
-          */}
+            required
+          />
         </div>
 
         {/* CONTEST IMAGE */}

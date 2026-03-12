@@ -25,20 +25,20 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#02101a] text-white">
-      <div className="bg-[#143c46] p-8 rounded-lg shadow-lg w-full max-w-md border border-cyan-900">
-        <h2 className="text-3xl font-bold mb-6 text-center text-[#9ce2f9]">Reset Password</h2>
-        <p className="text-gray-300 mb-6 text-center text-sm">
+    <div className="flex items-center justify-center min-h-screen bg-[#02101a] text-white p-4">
+      <div className="bg-[#1a4a56] p-8 md:p-12 rounded-3xl shadow-2xl w-full max-w-lg border border-[#9ce2f9]/20 animate-slideUp">
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center text-[#9ce2f9]">Reset Password</h2>
+        <p className="text-gray-300 mb-8 text-center text-base">
           Enter your email address and we'll send you a link to reset your password.
         </p>
 
-        <form onSubmit={submit} className="space-y-4">
+        <form onSubmit={submit} className="space-y-6">
           <div>
-            <label className="block text-gray-400 mb-2 text-sm">Email Address</label>
+            <label className="block text-gray-400 mb-2 text-sm font-bold uppercase tracking-widest pl-1">Email Address</label>
             <input
               type="email"
-              className="w-full p-3 rounded bg-[#0d2a33] border border-cyan-800 text-white focus:border-[#9ce2f9] focus:outline-none"
-              placeholder="Enter your email"
+              className="w-full p-4 rounded-2xl bg-[#0d2a33] border border-cyan-800 text-white focus:border-[#9ce2f9] focus:outline-none transition-all placeholder:text-gray-600"
+              placeholder="e.g. user@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -48,15 +48,15 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 rounded transition-all transform active:scale-95 shadow-lg"
+            className="w-full bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-bold py-4 rounded-2xl transition-all transform active:scale-95 shadow-xl hover:shadow-orange-500/20"
           >
             {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <Link to="/" className="text-gray-400 hover:text-white text-sm">
-            ← Back to Login
+        <div className="mt-8 text-center">
+          <Link to="/" className="text-[#9ce2f9] hover:text-white text-sm font-semibold transition-colors flex items-center justify-center gap-2">
+            <span>←</span> Back to Login
           </Link>
         </div>
       </div>

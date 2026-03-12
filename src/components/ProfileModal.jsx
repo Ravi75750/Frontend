@@ -28,41 +28,50 @@ export default function ProfileModal({ onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-      <div className="bg-[#143c46] text-gray-800 rounded-2xl shadow-xl w-full max-w-sm relative overflow-hidden">
-        
-        {/* Close Button is always visible */}
+      <div className="bg-[#1a4a56] text-white rounded-3xl shadow-2xl w-full max-w-md relative overflow-hidden border border-[#9ce2f9]/20 animate-slideUp">
+
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-4 text-xl text-gray-400 hover:text-red-500 z-10"
+          className="absolute top-4 right-5 text-2xl text-gray-400 hover:text-red-500 z-10 transition-colors"
         >
           ✕
         </button>
 
-        {/* 3. Conditional Rendering: Show Loader or Content */}
         {isLoading ? (
           <LoadingSpinner />
         ) : (
           <>
             {/* Header */}
-            <div className="bg-[#143c46] text-[#9ce2f9] text-center pb-8 pt-8 border-b border-[#9ce2f9]">
-              <img
-                src="/profile.png"
-                alt="User"
-                className="w-24 h-24 mx-auto rounded-full border-4 border-[#9ce2f9] object-cover"
-              />
-              <h2 className="text-xl font-bold mt-3">{user?.username}</h2>
+            <div className="bg-[#1f5a68] text-[#9ce2f9] text-center pb-10 pt-12 border-b border-[#9ce2f9]/30">
+              <div className="relative inline-block">
+                <img
+                  src="/profile.png"
+                  alt="User"
+                  className="w-28 h-28 mx-auto rounded-full border-4 border-[#9ce2f9] object-cover shadow-lg"
+                />
+                <div className="absolute bottom-0 right-0 bg-green-500 w-6 h-6 rounded-full border-4 border-[#1f5a68]"></div>
+              </div>
+              <h2 className="text-2xl font-bold mt-4 tracking-tight">{user?.username}</h2>
+              <p className="text-[#9ce2f9]/70 text-sm uppercase tracking-widest mt-1">Player Profile</p>
             </div>
 
             {/* Options Section */}
-            <div className="px-6 py-4">
-              <div className="flex items-center gap-3 bg-[#8ea29d] text-gray-900 hover:bg-gray-200 p-3 rounded-lg cursor-default">
-                <span className="text-blue-600 text-2xl">🙍‍♂️</span>
-                <p className="text-[18px] px-2 font-medium">{user?.username}</p>
+            <div className="px-8 py-8 space-y-4">
+              <div className="flex items-center gap-4 bg-[#27687a]/40 p-4 rounded-2xl border border-[#9ce2f9]/10">
+                <span className="text-2xl">👤</span>
+                <div className="flex flex-col">
+                  <span className="text-xs text-gray-400 uppercase font-bold">Username</span>
+                  <p className="text-lg font-semibold text-[#9ce2f9]">{user?.username}</p>
+                </div>
               </div>
 
-              <div className="flex items-center gap-3 bg-[#8ea29d] text-gray-900 hover:bg-gray-200 p-3 rounded-lg cursor-default mt-3">
-                <span className=" text-red-500 text-2xl">📧</span>
-                <p className="text-[18px] px-2 font-medium">{user?.email}</p>
+              <div className="flex items-center gap-4 bg-[#27687a]/40 p-4 rounded-2xl border border-[#9ce2f9]/10">
+                <span className="text-2xl">📧</span>
+                <div className="flex flex-col">
+                  <span className="text-xs text-gray-400 uppercase font-bold">Email Address</span>
+                  <p className="text-lg font-semibold text-white truncate max-w-[200px]">{user?.email}</p>
+                </div>
               </div>
 
               {/* Logout Button */}
@@ -71,7 +80,7 @@ export default function ProfileModal({ onClose }) {
                   logout();
                   onClose();
                 }}
-                className="w-full mt-6 bg-red-500 text-white font-semibold py-2 rounded-lg hover:bg-red-600 transition"
+                className="w-full mt-6 bg-gradient-to-r from-red-600 to-red-500 text-white font-bold py-4 rounded-2xl hover:from-red-700 hover:to-red-600 transition-all shadow-lg hover:shadow-red-500/30 active:scale-95"
               >
                 Log Out
               </button>

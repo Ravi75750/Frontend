@@ -13,8 +13,8 @@ export default function Header({ onLoginClick, onSignUpClick }) {
   return (
     <>
       {/* ==================== HEADER ==================== */}
-      <header className="bg-[#2b444a] text-white shadow-md">
-        <div className="flex justify-between items-center px-5 py-2 relative">
+      <header className="bg-[#2b444a] text-white shadow-md sticky top-0 z-40">
+        <div className="max-w-[1600px] mx-auto flex justify-between items-center px-5 md:px-10 py-2 relative">
 
           {/* LOGO */}
 

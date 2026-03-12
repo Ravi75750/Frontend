@@ -129,6 +129,9 @@ export default function ContestsPage() {
               <p>
                 Players Joined: {contest.participants?.length || 0}
               </p>
+              <p className="text-sm text-gray-400">
+                Match Time: {contest.matchTime ? new Date(contest.matchTime).toLocaleString() : "Not Set"}
+              </p>
 
               <p className="mt-1 text-sm">
                 Status:{" "}

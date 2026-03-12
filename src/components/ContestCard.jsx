@@ -268,11 +268,19 @@ export default function ContestCard({ contest, user, onJoinedContest }) {
         )}
 
         {contest.matchTime ? (
-          timeLeft !== null && !isLive && (
-            <p className="text-center mt-2 text-yellow-400 font-semibold">
-              Starts in: {formatTime(timeLeft)}
+          <div className="mt-2 space-y-1">
+            <p className="text-center text-blue-400 font-bold">
+              📅 {new Date(contest.matchTime).toLocaleDateString()}
             </p>
-          )
+            <p className="text-center text-blue-400 font-bold">
+              ⏰ {new Date(contest.matchTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </p>
+            {timeLeft !== null && !isLive && (
+              <p className="text-center text-yellow-400 font-semibold text-sm">
+                Starts in: {formatTime(timeLeft)}
+              </p>
+            )}
+          </div>
         ) : (
           <p className="text-center mt-2 text-blue-400 font-bold uppercase tracking-widest">
             Coming Soon
